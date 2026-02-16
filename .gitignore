@@ -1,5 +1,16 @@
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
+# .NET
+bin/
+obj/
+.vs/
+
+# Angular
+node_modules/
+dist/
+.angular/
+
+
 # Compiled output
 /dist
 /tmp
