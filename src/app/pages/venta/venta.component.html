@@ -1,0 +1,88 @@
+<div class="venta-card">
+    <div class="venta-head">
+        <div>
+            <h2>Venta</h2>
+            <p class="muted">Selecciona productos y confirma la venta.</p>
+        </div>
+
+        <span class="pill">
+            {{ productos.length }} productos
+        </span>
+    </div>
+
+    <!-- PRODUCTOS -->
+    <div class="section">
+        <div class="section-head">
+            <h3>Productos</h3>
+            <span class="hint">Stock en tiempo real</span>
+        </div>
+
+        <div class="list" *ngIf="productos.length > 0; else noProductos">
+            <div class="row" *ngFor="let p of productos">
+                <div class="left">
+                    <div class="name">{{ p.nombre }}</div>
+                    <div class="meta">
+                        <span class="price">{{ p.precio | currency:'CLP' }}</span>
+                        <span class="dot">•</span>
+                        <span class="stock" [ngClass]="{ 'stock-ok': p.stock > 0, 'stock-bad': p.stock === 0 }">
+                            Stock: {{ p.stock }}
+                        </span>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" (click)="agregarProducto(p)" [disabled]="p.stock === 0">
+                    Agregar
+                </button>
+            </div>
+        </div>
+
+        <ng-template #noProductos>
+            <p class="empty">No hay productos cargados.</p>
+        </ng-template>
+    </div>
+
+    <!-- CARRITO -->
+    <div class="section">
+        <div class="section-head">
+            <h3>Carrito</h3>
+            <span class="hint">{{ carrito.length }} ítems</span>
+        </div>
+
+        <div class="list" *ngIf="carrito.length > 0; else carritoVacio">
+            <div class="row" *ngFor="let c of carrito">
+                <div class="left">
+                    <div class="name">{{ c.nombre }}</div>
+                    <div class="meta">
+                        <span class="qty">x {{ c.cantidad }}</span>
+                        <span class="dot">•</span>
+                        <span class="sub">{{ (c.precio * c.cantidad) | currency:'CLP' }}</span>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-ghost" type="button" (click)="quitarUno(c)">-</button>
+                    <button class="btn btn-ghost" type="button" (click)="quitarItemCompleto(c)">Quitar</button>
+                </div>
+            </div>
+        </div>
+
+        <ng-template #carritoVacio>
+            <p class="empty">Carrito vacío. Agrega productos para empezar.</p>
+        </ng-template>
+
+        <div class="totals">
+            <span class="totals-label">Total</span>
+            <span class="totals-value">{{ total | currency:'CLP' }}</span>
+        </div>
+
+        <div class="footer-actions">
+            <button class="btn" type="button" (click)="vaciarCarrito()" [disabled]="carrito.length === 0">
+                Vaciar carrito
+            </button>
+
+            <button class="btn btn-primary" type="button" (click)="confirmarVenta()" [disabled]="carrito.length === 0">
+                Confirmar venta
+            </button>
+        </div>
+    </div>
+</div>

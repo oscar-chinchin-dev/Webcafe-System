@@ -1,0 +1,116 @@
+<div class="page">
+    <div class="card">
+        <div class="header">
+            <div>
+                <h2>Historial de Ventas</h2>
+                <p class="subtitle">Revisa ventas, detalle e impresión.</p>
+            </div>
+        </div>
+
+        <div *ngIf="loading" class="hint">Cargando ventas...</div>
+        <div *ngIf="!loading && errorMsg" class="error">{{ errorMsg }}</div>
+        <div *ngIf="!loading && !errorMsg && ventas.length === 0" class="hint">
+            No hay ventas registradas.
+        </div>
+
+        <div *ngIf="toast.show" class="toast" [class.ok]="toast.type==='ok'" [class.bad]="toast.type==='bad'">
+            {{ toast.text }}
+        </div>
+
+        <div class="table-wrap" *ngIf="ventas.length > 0">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Cajero</th>
+                        <th class="right">Total</th>
+                        <th>Detalle</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <ng-container *ngFor="let v of ventas">
+                        <tr>
+                            <td>{{ v.fecha | date:'short' }}</td>
+                            <td>{{ v.usuarioNombre || v.cajero }}</td>
+                            <td class="right">{{ v.total | currency:'CLP' }}</td>
+
+                            <td class="actions">
+                                <button class="btn btn-ghost" type="button" (click)="imprimirVenta(v)">Imprimir</button>
+
+                                <button class="btn btn-solid" type="button" (click)="toggleDetalle(v.ventaId)">
+                                    {{ ventaExpandidaId === v.ventaId ? 'Ocultar' : 'Ver' }}
+                                </button>
+                            </td>
+
+                            <td>
+                                <span class="badge" [ngClass]="{
+                  'badge-ok': v.estado === 'CONFIRMADA' && !v.anulada,
+                  'badge-warn': v.estado === 'ABIERTA' && !v.anulada,
+                  'badge-bad': v.anulada
+                }">
+                                    {{ v.anulada ? 'ANULADA' : v.estado }}
+                                </span>
+                            </td>
+                        </tr>
+
+                        <tr *ngIf="ventaExpandidaId === v.ventaId" class="row-detail">
+                            <td colspan="5">
+                                <div class="detail-card">
+                                    <div class="detail-title">Detalle de venta #{{ v.ventaId }}</div>
+
+                                    <div class="table-wrap inner">
+                                        <table class="table table-inner">
+                                            <thead>
+                                                <tr>
+                                                    <th>Producto</th>
+                                                    <th class="right">Cantidad</th>
+                                                    <th class="right">Precio</th>
+                                                    <th class="right">Subtotal</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let d of v.detalles">
+                                                    <td>{{ d.productoNombre }}</td>
+                                                    <td class="right">{{ d.cantidad }}</td>
+                                                    <td class="right">{{ d.precio | currency:'CLP' }}</td>
+                                                    <td class="right">{{ d.precio * d.cantidad | currency:'CLP' }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- PRINT AREA (se imprime solo si tu CSS lo controla con @media print) -->
+    <div id="print-area" *ngIf="ventaSeleccionada" class="print-area">
+        <h2>Boleta - Venta #{{ ventaSeleccionada.ventaId }}</h2>
+        <p>Fecha: {{ ventaSeleccionada.fecha | date:'short' }}</p>
+        <p>Cajero: {{ ventaSeleccionada.usuarioNombre }}</p>
+
+        <table class="table table-inner" width="100%">
+            <tr>
+                <th>Producto</th>
+                <th class="right">Cant</th>
+                <th class="right">Precio</th>
+                <th class="right">Sub</th>
+            </tr>
+            <tr *ngFor="let d of ventaSeleccionada.detalles">
+                <td>{{ d.productoNombre }}</td>
+                <td class="right">{{ d.cantidad }}</td>
+                <td class="right">{{ d.precio | currency:'CLP' }}</td>
+                <td class="right">{{ d.precio * d.cantidad | currency:'CLP' }}</td>
+            </tr>
+        </table>
+
+        <h3>Total: {{ ventaSeleccionada.total | currency:'CLP' }}</h3>
+    </div>
+</div>

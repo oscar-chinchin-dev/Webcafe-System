@@ -1,0 +1,231 @@
+.page {
+    padding: 28px;
+    background: #fafafa;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+.card {
+    max-width: 980px;
+    margin: 0 auto;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+}
+
+.header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+h2 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.subtitle {
+    margin: 6px 0 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.hint {
+    margin: 10px 0;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.error {
+    margin: 10px 0;
+    color: #b91c1c;
+    font-size: 14px;
+}
+
+.toast {
+    margin: 12px 0;
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    border: 1px solid transparent;
+}
+
+.toast.ok {
+    background: #d1fae5;
+    color: #065f46;
+    border-color: #a7f3d0;
+}
+
+.toast.bad {
+    background: #fee2e2;
+    color: #991b1b;
+    border-color: #fecaca;
+}
+
+.table-wrap {
+    overflow: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    min-width: 720px;
+}
+
+.table thead th {
+    text-align: left;
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 700;
+    padding: 12px;
+    background: #fafafa;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.table td {
+    padding: 12px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: top;
+}
+
+.table tbody tr:hover td {
+    background: #fcfcfd;
+}
+
+.right {
+    text-align: right;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.btn {
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: transform 0.02s ease;
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn-solid {
+    background: #111827;
+    color: #fff;
+}
+
+.btn-ghost {
+    background: #fff;
+    border-color: #e5e7eb;
+    color: #111827;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Badges (tuyos) */
+.badge {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    display: inline-block;
+}
+
+.badge-ok {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.badge-warn {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.badge-bad {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Detalle expandido */
+.row-detail td {
+    background: #fafafa;
+}
+
+.detail-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 12px;
+}
+
+.detail-title {
+    font-weight: 800;
+    margin-bottom: 10px;
+    color: #111827;
+}
+
+.table-wrap.inner {
+    border-radius: 10px;
+}
+
+.table.table-inner {
+    min-width: 520px;
+}
+
+/* Print: imprime solo print-area */
+@media print {
+
+    .page,
+    .card,
+    .table-wrap,
+    table {
+        box-shadow: none !important;
+    }
+
+    .card {
+        border: none !important;
+    }
+
+    .btn,
+    .toast,
+    .hint,
+    .error {
+        display: none !important;
+    }
+
+    .page * {
+        visibility: hidden;
+    }
+
+    #print-area,
+    #print-area * {
+        visibility: visible;
+    }
+
+    #print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 12px;
+    }
+}

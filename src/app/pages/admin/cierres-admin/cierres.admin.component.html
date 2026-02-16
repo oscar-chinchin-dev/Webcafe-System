@@ -1,0 +1,90 @@
+<div class="page">
+    <div class="card">
+        <div class="head">
+            <div>
+                <h2>Historial de cierres</h2>
+                <p class="muted">Cierres de caja registrados (admin).</p>
+            </div>
+        </div>
+
+        <div class="state" *ngIf="loading">Cargando...</div>
+        <div class="state error" *ngIf="!loading && errorMsg">{{ errorMsg }}</div>
+        <div class="state muted" *ngIf="!loading && !errorMsg && cierres.length === 0">No hay cierres.</div>
+
+        <div class="table-wrap" *ngIf="cierres.length > 0">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cajero</th>
+                        <th>Apertura</th>
+                        <th>Cierre</th>
+                        <th>Estado</th>
+                        <th class="right">Total ventas</th>
+                        <th class="right">Acción</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <ng-container *ngFor="let c of cierres">
+                        <tr>
+                            <td class="mono">#{{ c.cierreCajaId }}</td>
+                            <td>{{ c.cajero }}</td>
+                            <td>{{ c.fechaApertura | date:'short' }}</td>
+                            <td>{{ c.fechaCierre ? (c.fechaCierre | date:'short') : '—' }}</td>
+
+                            <td>
+                                <span class="badge" [ngClass]="{
+                    'badge-warn': c.estado === 'ABIERTA',
+                    'badge-ok': c.estado === 'CERRADA'
+                  }">
+                                    {{ c.estado }}
+                                </span>
+                            </td>
+
+                            <td class="right">{{ c.totalVentas | currency:'CLP' }}</td>
+
+                            <td class="right">
+                                <button class="btn btn-ghost" type="button" (click)="toggleDetalle(c.cierreCajaId)">
+                                    {{ expandedId === c.cierreCajaId ? 'Ocultar' : 'Ver' }}
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr *ngIf="expandedId === c.cierreCajaId && resumen">
+                            <td colspan="7" class="expand">
+                                <div class="expand-card">
+                                    <div class="expand-head">
+                                        <h3>Detalle cierre #{{ resumen.cierreCajaId }}</h3>
+                                    </div>
+
+                                    <div class="grid">
+                                        <div><span class="k">Monto inicial</span><span class="v">{{ resumen.montoInicial
+                                                | currency:'CLP' }}</span></div>
+                                        <div><span class="k">Total ventas</span><span class="v">{{ resumen.totalVentas |
+                                                currency:'CLP' }}</span></div>
+                                        <div><span class="k">Cantidad ventas</span><span class="v">{{
+                                                resumen.cantidadVentas }}</span></div>
+                                        <div><span class="k">Esperado</span><span class="v">{{ resumen.esperado |
+                                                currency:'CLP' }}</span></div>
+                                        <div><span class="k">Monto final declarado</span><span class="v">{{
+                                                resumen.montoFinalDeclarado | currency:'CLP' }}</span></div>
+
+                                        <div>
+                                            <span class="k">Diferencia</span>
+                                            <span class="v"
+                                                [ngClass]="{ 'pos': resumen.diferencia === 0, 'neg': resumen.diferencia !== 0 }">
+                                                {{ resumen.diferencia | currency:'CLP' }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

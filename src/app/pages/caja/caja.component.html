@@ -1,0 +1,125 @@
+<div class="page">
+    <div class="card">
+        <div class="head">
+            <div>
+                <h2>Caja</h2>
+                <p class="muted">Abrir/cerrar caja y registrar ventas.</p>
+            </div>
+
+            <span class="badge" [ngClass]="{ 'badge-ok': cajaAbierta, 'badge-bad': !cajaAbierta }">
+                {{ cajaAbierta ? 'ABIERTA' : 'CERRADA' }}
+            </span>
+        </div>
+
+        <div class="state" *ngIf="loading">Cargando...</div>
+        <div class="state error" *ngIf="!loading && errorMsg">{{ errorMsg }}</div>
+
+        <div *ngIf="!loading && !errorMsg">
+
+            <!-- NO HAY CAJA ABIERTA -->
+            <div *ngIf="!cajaAbierta" class="section">
+                <h3>Abrir caja</h3>
+
+                <label class="label">Monto inicial</label>
+                <input class="input" type="number" [(ngModel)]="montoInicial" placeholder="0" />
+
+                <div class="actions">
+                    <button class="btn btn-primary" (click)="abrirCaja()">Abrir caja</button>
+                </div>
+            </div>
+
+            <!-- HAY CAJA ABIERTA -->
+            <div *ngIf="cajaAbierta && cajaActual" class="section">
+                <div class="info">
+                    <div>
+                        <span class="k">ID caja</span>
+                        <span class="v mono">#{{ cajaActual.cierreCajaId }}</span>
+                    </div>
+                    <div>
+                        <span class="k">Apertura</span>
+                        <span class="v">{{ cajaActual.fechaApertura | date:'short' }}</span>
+                    </div>
+                    <div>
+                        <span class="k">Monto inicial</span>
+                        <span class="v">{{ cajaActual.montoInicial | currency:'CLP' }}</span>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <h3>Registrar venta</h3>
+                <div class="slot">
+                    <app-venta></app-venta>
+                </div>
+
+                <div class="divider"></div>
+
+                <h3>Cerrar caja</h3>
+                <label class="label">Monto final declarado (opcional)</label>
+                <input class="input" type="number" [(ngModel)]="montoFinalDeclarado" placeholder="(opcional)" />
+
+                <div class="actions">
+                    <button class="btn btn-danger" (click)="cerrarCaja()">Cerrar caja</button>
+                </div>
+            </div>
+
+            <!-- RESUMEN -->
+            <div *ngIf="resumen" class="summary">
+                <div class="summary-head">
+                    <h3>Resumen de cierre</h3>
+                    <button class="btn btn-ghost" type="button" (click)="imprimirResumen()">
+                        Imprimir
+                    </button>
+                </div>
+
+                <div class="grid">
+                    <div><span class="k">ID</span><span class="v mono">#{{ resumen.cierreCajaId }}</span></div>
+                    <div><span class="k">Estado</span><span class="v">{{ resumen.estado }}</span></div>
+                    <div><span class="k">Apertura</span><span class="v">{{ resumen.fechaApertura | date:'short'
+                            }}</span></div>
+                    <div><span class="k">Cierre</span><span class="v">{{ resumen.fechaCierre | date:'short' }}</span>
+                    </div>
+
+                    <div><span class="k">Monto inicial</span><span class="v">{{ resumen.montoInicial | currency:'CLP'
+                            }}</span></div>
+                    <div><span class="k">Total ventas</span><span class="v">{{ resumen.totalVentas | currency:'CLP'
+                            }}</span></div>
+                    <div><span class="k">Cantidad ventas</span><span class="v">{{ resumen.cantidadVentas }}</span></div>
+                    <div><span class="k">Esperado</span><span class="v">{{ resumen.esperado | currency:'CLP' }}</span>
+                    </div>
+                    <div><span class="k">Monto final declarado</span><span class="v">{{ resumen.montoFinalDeclarado |
+                            currency:'CLP' }}</span></div>
+
+                    <div>
+                        <span class="k">Diferencia</span>
+                        <span class="v"
+                            [ngClass]="{ 'pos': resumen.diferencia === 0, 'neg': resumen.diferencia !== 0 }">
+                            {{ resumen.diferencia | currency:'CLP' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRINT AREA (igual, pero sin romper estilos) -->
+            <div id="print-area-cierre" *ngIf="resumen" class="print-area">
+                <h2>Resumen Cierre #{{ resumen.cierreCajaId }}</h2>
+                <p>Cajero: {{ resumen.cajero }}</p>
+                <p>Apertura: {{ resumen.fechaApertura | date:'short' }}</p>
+                <p>Cierre: {{ resumen.fechaCierre | date:'short' }}</p>
+                <hr>
+                <p>Monto inicial: {{ resumen.montoInicial | currency:'CLP' }}</p>
+                <p>Total ventas: {{ resumen.totalVentas | currency:'CLP' }}</p>
+                <p>Cantidad ventas: {{ resumen.cantidadVentas }}</p>
+                <p>Esperado: {{ resumen.esperado | currency:'CLP' }}</p>
+                <p>Monto final declarado: {{ resumen.montoFinalDeclarado | currency:'CLP' }}</p>
+                <p>
+                    Diferencia:
+                    <b [style.color]="resumen.diferencia === 0 ? 'green' : 'red'">
+                        {{ resumen.diferencia | currency:'CLP' }}
+                    </b>
+                </p>
+            </div>
+
+        </div>
+    </div>
+</div>

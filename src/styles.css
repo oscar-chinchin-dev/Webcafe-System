@@ -1,0 +1,30 @@
+/* Oculta áreas de impresión en pantalla */
+#print-area,
+#print-area-cierre {
+    display: none;
+}
+
+@media print {
+    body * {
+        visibility: hidden !important;
+    }
+
+    /* Soporta imprimir venta o cierre (el que exista en ese momento) */
+    #print-area,
+    #print-area *,
+    #print-area-cierre,
+    #print-area-cierre * {
+        visibility: visible !important;
+    }
+
+    #print-area,
+    #print-area-cierre {
+        display: block !important;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white;
+        padding: 16px;
+    }
+}

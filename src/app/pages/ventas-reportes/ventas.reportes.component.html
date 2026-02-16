@@ -1,0 +1,139 @@
+<div class="page">
+    <div class="card">
+        <div class="header">
+            <div>
+                <h2>Reportes</h2>
+                <p class="subtitle">Diario y por rango de fechas.</p>
+            </div>
+        </div>
+
+        <div *ngIf="loading" class="hint">Cargando...</div>
+        <div *ngIf="!loading && errorMsg" class="error">{{ errorMsg }}</div>
+
+        <!-- Diario -->
+        <div class="section">
+            <div class="section-head">
+                <div>
+                    <h3>Reporte diario (hoy)</h3>
+                    <p class="muted">Resumen del día actual.</p>
+                </div>
+                <button class="btn btn-solid" type="button" (click)="cargarDiario()">
+                    Cargar
+                </button>
+            </div>
+
+            <div *ngIf="diario" class="panel">
+                <div class="kpis">
+                    <div class="kpi">
+                        <div class="kpi-label">Fecha</div>
+                        <div class="kpi-value">{{ diario.fecha }}</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-label">Cantidad ventas</div>
+                        <div class="kpi-value">{{ diario.cantidadVentas }}</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-label">Total vendido</div>
+                        <div class="kpi-value">{{ diario.totalVendido | currency:'CLP' }}</div>
+                    </div>
+                </div>
+
+                <div class="table-wrap">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Fecha</th>
+                                <th>Cajero</th>
+                                <th class="right">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let v of diario.ventas">
+                                <td>{{ v.ventaId }}</td>
+                                <td>{{ v.fecha | date:'short' }}</td>
+                                <td>{{ v.cajero }}</td>
+                                <td class="right">{{ v.total | currency:'CLP' }}</td>
+                            </tr>
+                            <tr *ngIf="diario.ventas.length === 0">
+                                <td colspan="4" class="hint">No hay ventas hoy.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rango -->
+        <div class="section">
+            <div class="section-head">
+                <div>
+                    <h3>Reporte por rango</h3>
+                    <p class="muted">Selecciona un período y busca.</p>
+                </div>
+
+                <div class="filters">
+                    <label class="field">
+                        <span>Desde</span>
+                        <input type="date" [(ngModel)]="desde">
+                    </label>
+
+                    <label class="field">
+                        <span>Hasta</span>
+                        <input type="date" [(ngModel)]="hasta">
+                    </label>
+
+                    <button class="btn btn-solid" type="button" (click)="cargarRango()">
+                        Buscar
+                    </button>
+                </div>
+            </div>
+
+            <div *ngIf="rango" class="panel">
+                <div class="kpis">
+                    <div class="kpi">
+                        <div class="kpi-label">Desde</div>
+                        <div class="kpi-value">{{ rango.desde }}</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-label">Hasta</div>
+                        <div class="kpi-value">{{ rango.hasta }}</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-label">Cantidad ventas</div>
+                        <div class="kpi-value">{{ rango.cantidadVentas }}</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-label">Total vendido</div>
+                        <div class="kpi-value">{{ rango.totalVendido | currency:'CLP' }}</div>
+                    </div>
+                </div>
+
+                <div class="table-wrap">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Fecha</th>
+                                <th>Cajero</th>
+                                <th class="right">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let v of rango.ventas">
+                                <td>{{ v.ventaId }}</td>
+                                <td>{{ v.fecha | date:'short' }}</td>
+                                <td>{{ v.cajero }}</td>
+                                <td class="right">{{ v.total | currency:'CLP' }}</td>
+                            </tr>
+                            <tr *ngIf="rango.ventas.length === 0">
+                                <td colspan="4" class="hint">No hay ventas en ese rango.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

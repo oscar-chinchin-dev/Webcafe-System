@@ -1,0 +1,55 @@
+<div class="page">
+    <div class="header">
+        <div>
+            <h1>Dashboard</h1>
+            <p>Resumen rápido del día.</p>
+        </div>
+
+        <button class="btn" (click)="cargarDashboard()">Actualizar</button>
+
+    </div>
+
+    <p *ngIf="loading">Cargando...</p>
+    <p *ngIf="!loading && errorMsg" class="err">{{ errorMsg }}</p>
+
+
+
+    <div class="grid" *ngIf="!loading && !errorMsg">
+
+
+
+
+        <div class="card">
+            <div class="label">Caja</div>
+            <div class="value" [class.ok]="caja?.estado==='ABIERTA'" [class.bad]="!caja || caja.estado!=='ABIERTA'">
+                {{ caja?.estado ?? 'CERRADA' }}
+            </div>
+            <div class="muted" *ngIf="caja">ID: #{{ caja.cierreCajaId }}</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Total vendido (hoy)</div>
+            <div class="value">{{ totalHoy | currency:'CLP' }}</div>
+            <div class="muted">Fecha: {{ diario?.fecha }}</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Cantidad de ventas (hoy)</div>
+            <div class="value">{{ cantidadHoy }}</div>
+            <div class="muted">Operaciones del día</div>
+        </div>
+
+        <div class="card">
+            <div class="label">Última venta</div>
+            <div class="value" *ngIf="ultimaVenta; else sinVentas">
+                #{{ ultimaVenta.ventaId }} · {{ ultimaVenta.total | currency:'CLP' }}
+            </div>
+            <ng-template #sinVentas>
+                <div class="muted">Aún no hay ventas hoy.</div>
+            </ng-template>
+            <div class="muted" *ngIf="ultimaVenta">
+                {{ ultimaVenta.fecha | date:'short' }} · {{ ultimaVenta.cajero }}
+            </div>
+        </div>
+    </div>
+</div>

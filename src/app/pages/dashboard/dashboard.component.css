@@ -1,0 +1,77 @@
+.page {
+    max-width: 980px;
+    margin: 24px auto;
+    padding: 0 16px;
+}
+
+.header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+h1 {
+    margin: 0;
+}
+
+p {
+    margin: 6px 0 0;
+    color: #6b7280;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.card {
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 16px;
+    background: white;
+}
+
+.label {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 6px;
+}
+
+.value {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.muted {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.ok {
+    color: #065f46;
+}
+
+.bad {
+    color: #991b1b;
+}
+
+.err {
+    color: #991b1b;
+}
+
+.btn {
+    border: 1px solid #e5e7eb;
+    background: #111827;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    opacity: 0.95;
+}

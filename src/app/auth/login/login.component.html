@@ -1,0 +1,24 @@
+<div class="auth-wrap">
+    <div class="auth-card">
+        <h2 class="auth-title">Iniciar sesión</h2>
+        <p class="auth-subtitle">Accede con tu usuario para continuar.</p>
+
+        <form class="auth-form" (ngSubmit)="login()">
+            <div class="field">
+                <label class="label" for="email">Email</label>
+                <input id="email" class="input" type="email" [(ngModel)]="email" name="email" required
+                    autocomplete="username" placeholder="tu@email.com" />
+            </div>
+
+            <div class="field">
+                <label class="label" for="password">Password</label>
+                <input id="password" class="input" type="password" [(ngModel)]="password" name="password" required
+                    autocomplete="current-password" placeholder="••••••••" />
+            </div>
+
+            <button class="btn" type="submit">Entrar</button>
+
+            <p *ngIf="error" class="error">{{ error }}</p>
+        </form>
+    </div>
+</div>

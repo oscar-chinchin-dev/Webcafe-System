@@ -1,0 +1,201 @@
+<div class="page">
+    <div class="topbar">
+        <div>
+            <h1 class="title">Panel Admin</h1>
+            <p class="subtitle">Gestión simple de categorías y productos.</p>
+        </div>
+
+        <div class="actions">
+            <button class="btn" type="button" routerLink="/dashboard">
+                Dashboard
+            </button>
+            <button class="btn ghost" type="button" (click)="irVentas()">Ventas</button>
+            <button class="btn ghost" type="button" (click)="irReportes()">Reportes</button>
+            <button class="btn" type="button" routerLink="/cierres-admin">Cierres</button>
+        </div>
+    </div>
+
+    <!-- CATEGORÍAS -->
+    <div class="card" *ngIf="categoriaForm">
+        <div class="card-head">
+            <h2 class="card-title">Categorías</h2>
+            <span class="hint">Crear / editar categorías</span>
+        </div>
+
+        <form class="form" [formGroup]="categoriaForm" (ngSubmit)="guardarCategoria()">
+            <div class="grid">
+                <div class="field">
+                    <label class="label">Nombre</label>
+                    <input class="input" type="text" formControlName="nombre" placeholder="Ej: Cafés" />
+
+                    <div class="error"
+                        *ngIf="categoriaForm.get('nombre')?.invalid && categoriaForm.get('nombre')?.touched">
+                        El nombre es obligatorio
+                    </div>
+
+                    <div *ngIf="erroresBackend?.Nombre" class="error">
+                        {{ erroresBackend.Nombre[0] }}
+                    </div>
+                </div>
+
+                <div class="field inline">
+                    <label class="check">
+                        <input type="checkbox" formControlName="activo" />
+                        Activa
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn" type="submit" [disabled]="categoriaForm.invalid">
+                    {{ categoriaEditandoId ? 'Actualizar' : 'Crear' }}
+                </button>
+
+                <button class="btn ghost" type="button" *ngIf="categoriaEditandoId" (click)="cancelarEdicion()">
+                    Cancelar
+                </button>
+            </div>
+        </form>
+
+        <div class="table-wrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Estado</th>
+                        <th class="right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let c of categorias">
+                        <td>{{ c.nombre }}</td>
+                        <td>
+                            <span class="badge" [class.ok]="c.activo" [class.bad]="!c.activo">
+                                {{ c.activo ? 'Activa' : 'Inactiva' }}
+                            </span>
+                        </td>
+                        <td class="right">
+                            <button class="btn tiny ghost" type="button" (click)="editarCategoria(c)">Editar</button>
+                            <button class="btn tiny danger" type="button"
+                                (click)="eliminarCategoria(c.categoriaId)">Eliminar</button>
+                        </td>
+                    </tr>
+
+                    <tr *ngIf="categorias.length === 0">
+                        <td colspan="3" class="muted">No hay categorías.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- PRODUCTOS -->
+    <div class="card">
+        <div class="card-head">
+            <h2 class="card-title">Productos</h2>
+            <span class="hint">Crear / editar productos</span>
+        </div>
+
+        <form class="form" [formGroup]="productoForm" (ngSubmit)="guardarProducto()">
+            <div *ngIf="errorProducto" class="error" style="margin-bottom:10px;">
+                {{ errorProducto }}
+            </div>
+
+            <div class="grid products-grid">
+                <div class="field">
+                    <label class="label">Nombre</label>
+                    <input class="input" type="text" formControlName="nombre" placeholder="Ej: Capuccino" />
+                    <div *ngIf="erroresBackend?.Nombre" class="error">{{ erroresBackend.Nombre[0] }}</div>
+                    <div class="error"
+                        *ngIf="productoForm.get('nombre')?.touched && productoForm.get('nombre')?.invalid">
+                        El nombre es obligatorio
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Precio</label>
+                    <input class="input" type="number" formControlName="precio" placeholder="Ej: 2500" />
+                    <div *ngIf="erroresBackend?.Precio" class="error">{{ erroresBackend.Precio[0] }}</div>
+                    <div class="error"
+                        *ngIf="productoForm.get('precio')?.errors?.['required'] && productoForm.get('precio')?.touched">
+                        El precio es obligatorio
+                    </div>
+                    <div class="error"
+                        *ngIf="productoForm.get('precio')?.touched && productoForm.get('precio')?.invalid">
+                        El precio debe ser mayor a 0
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Categoría</label>
+                    <select class="input" formControlName="categoriaId">
+                        <option value="">Seleccione categoría</option>
+                        <option *ngFor="let c of categorias" [value]="c.categoriaId">
+                            {{ c.nombre }}
+                        </option>
+                    </select>
+
+                    <div *ngIf="erroresBackend?.CategoriaId" class="error">{{ erroresBackend.CategoriaId[0] }}</div>
+                    <div class="error"
+                        *ngIf="productoForm.get('categoriaId')?.touched && productoForm.get('categoriaId')?.invalid">
+                        Debe seleccionar una categoría
+                    </div>
+                    <div *ngIf="errorCategoria" class="error">{{ errorCategoria }}</div>
+                </div>
+
+                <div class="field inline">
+                    <label class="check">
+                        <input type="checkbox" formControlName="activo" />
+                        Activo
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn" type="submit" [disabled]="productoForm.invalid">
+                    {{ productoEditandoId ? 'Actualizar' : 'Crear' }}
+                </button>
+
+                <button class="btn ghost" type="button" *ngIf="productoEditandoId" (click)="cancelarEdicionProducto()">
+                    Cancelar
+                </button>
+            </div>
+        </form>
+
+        <div class="table-wrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Categoría</th>
+                        <th>Estado</th>
+                        <th class="right">Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let p of productos">
+                        <td>{{ p.nombre }}</td>
+                        <td>{{ p.precio | currency:'CLP' }}</td>
+                        <td>{{ p.categoriaNombre }}</td>
+                        <td>
+                            <span class="badge" [class.ok]="p.activo" [class.bad]="!p.activo">
+                                {{ p.activo ? 'Activo' : 'Inactivo' }}
+                            </span>
+                        </td>
+                        <td class="right">
+                            <button class="btn tiny ghost" type="button" (click)="editarProducto(p)">Editar</button>
+                            <button class="btn tiny danger" type="button"
+                                (click)="eliminarProducto(p.productoId)">Eliminar</button>
+                        </td>
+                    </tr>
+
+                    <tr *ngIf="productos.length === 0">
+                        <td colspan="5" class="muted">No hay productos.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
