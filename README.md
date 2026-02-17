@@ -37,16 +37,6 @@ This project was developed as a practical learning exercise to simulate a real-w
 
 ---
 
-## Project Structure
-
-Webcafe-System
-│
-├── MiWebCafe.API        # Backend (ASP.NET Core Web API)
-├── src / public         # Frontend (Angular)
-└── README.md
-
----
-
 ## Authentication & Security
 
 The system uses:
