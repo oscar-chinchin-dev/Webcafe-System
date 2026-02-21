@@ -1,109 +1,75 @@
-# WebCafe System
+# MiWebCafe Angular Frontend
 
-Full-stack web application designed to manage the daily operations of a cafeteria, including authentication, sales management, and administrative reporting.
+Frontend application built with Angular to manage cafeteria operations through a secure REST API.
 
-This project was developed as a practical learning exercise to simulate a real-world business workflow using modern web technologies and a clean backend architecture.
+This client consumes the MiWebCafe API backend.
 
 ---
 
 ## Features
 
-- User authentication with JWT
-- Role-based access control (Admin / Cashier)
-- Sales registration and management
-- Administrative reports
-- Secure API communication
-- Separation of concerns using services and DTOs
+- JWT Authentication
+- Role-based route protection
+- Sales registration UI
+- Cash register management
+- HTTP interceptors for token handling
+- Route guards
 
 ---
 
 ## Tech Stack
 
-**Frontend**
 - Angular
 - TypeScript
+- Angular Router
 - HTTP Client
-- Route Guards
 - Interceptors
-
-**Backend**
-- ASP.NET Core Web API
-- Entity Framework Core
-- JWT Authentication
-- RESTful API design
-
-**Database**
-- SQL Server (SSMS)
+- Route Guards
 
 ---
 
-## Authentication & Security
+## Authentication Flow
 
-The system uses:
+1. User logs in
+2. JWT token is stored
+3. Token is attached to HTTP requests
+4. Backend validates authorization
 
-- JWT tokens for authentication
-- Role-based authorization
-- Route guards on the frontend
-- Middleware validation on the backend
-
-Roles implemented:
+Roles:
 - Admin
 - Cashier
 
 ---
 
-## How to Run the Project
-
-### Backend
-
-1. Open the solution in Visual Studio
-2. Configure the connection string in:
-
-appsettings.json
-
-3. Update the database:
-
-Update-Database
-
-4. Run the API
-
----
-
-### Frontend
-
-In the project root:
+## Running Locally
 
 npm install
 ng serve
 
-The application will run at:
 
-http://localhost:4200
-
----
-
-## Learning Goals of This Project
-
-This project was built to practice:
-
-- Full-stack architecture
-- REST API design
-- Authentication with JWT
-- Angular services and guards
-- Database design with Entity Framework
-- Clean code and project documentation
+Application runs at:
+(http://localhost:4200)
 
 ---
 
-## Author
+## Backend Dependency
 
-Developed by Oscar Chinchin
+This frontend requires the MiWebCafe API backend to be running.
+
+API base URL should be configured in:
+environment.ts
 
 ---
 
 ## Future Improvements
 
+- UI enhancements
 - Dashboard analytics
 - Inventory module
-- Deployment to cloud environment
-- UI improvements
+- Deployment optimization
+
+---
+
+## Author
+
+Oscar Chinchin
